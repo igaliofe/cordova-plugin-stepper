@@ -218,10 +218,10 @@ public class PedoListener extends CordovaPlugin implements SensorEventListener {
     boolean isSensor;
    
     if (sensor != null) {
-      isSensor(true);
+      isSensor = true;
     } else {
       this.status = PedoListener.ERROR_NO_SENSOR_FOUND;
-      isSensor(false);
+      isSensor= false;
     }
     try {
       result.put("isSensorAvailable", isSensor);
