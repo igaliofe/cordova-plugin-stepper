@@ -447,15 +447,23 @@ public class PedoListener extends CordovaPlugin implements SensorEventListener {
   }
 
   private void win(JSONObject message) {
-    // Success return object
     PluginResult result;
-    if (message != null) {
+    if(message != null) {
       result = new PluginResult(PluginResult.Status.OK, message);
-    } else {
+    }
+    else {
       result = new PluginResult(PluginResult.Status.OK);
     }
+    callbackContext.sendPluginResult(result);
+  }
 
-    result.setKeepCallback(true);
+  private void win(boolean success) {
+    PluginResult result = new PluginResult(PluginResult.Status.OK, success);
+    callbackContext.sendPluginResult(result);
+  }
+
+  private void win() {
+    PluginResult result = new PluginResult(PluginResult.Status.OK);
     callbackContext.sendPluginResult(result);
   }
 
