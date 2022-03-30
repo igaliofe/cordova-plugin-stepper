@@ -214,11 +214,19 @@ public class PedoListener extends CordovaPlugin implements SensorEventListener {
   private void isStepCountingAvailable() {
     sensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
     sensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+    JSONObject result = new JSONObject();
+    boolean isSensor;
+   
     if (sensor != null) {
-      this.win(true);
+      isSensor(true);
     } else {
       this.status = PedoListener.ERROR_NO_SENSOR_FOUND;
-      this.win(false);
+      isSensor(false);
+    }
+    try {
+      result.put("isSensorAvailable", isSensor);
+    } catch (JSONException e) {
+      e.printStackTrace();
     }
   }
 
@@ -456,12 +464,6 @@ public class PedoListener extends CordovaPlugin implements SensorEventListener {
     }
     callbackContext.sendPluginResult(result);
   }
-
-  private void win(boolean success) {
-    PluginResult result = new PluginResult(PluginResult.Status.OK, success);
-    callbackContext.sendPluginResult(result);
-  }
-
   private void fail(int code, String message) {
     // Error object
     JSONObject errorObj = new JSONObject();
