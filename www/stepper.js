@@ -5,7 +5,12 @@ var Stepper = function () {
 };
 
 Stepper.prototype.isStepCountingAvailable = function (onSuccess, onError) {
-    exec(onSuccess, onError, "Stepper", "isStepCountingAvailable", []);
+    let promise = new Promise(function(resolve, reject) {
+        exec(resolve, reject, "Stepper", "isStepCountingAvailable", []);
+    });
+    if (onSuccess) promise = promise.then(onSuccess);
+    if (onError) promise = promise.catch(onError);
+    return promise;
 };
 
 Stepper.prototype.startStepperUpdates = function (offset, onSuccess, onError, options) {

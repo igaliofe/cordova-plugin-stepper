@@ -56,10 +56,10 @@ public class PedoListener extends CordovaPlugin implements SensorEventListener {
   private int startOffset = 0, todayOffset, total_start, goal, since_boot, total_days;
   public final static NumberFormat formatter = NumberFormat.getInstance(Locale.getDefault());
 
-  private SensorManager sensorManager;      // Sensor manager
-  private Sensor sensor;                    // Pedometer sensor returned by sensor manager
+  private SensorManager sensorManager; // Sensor manager
+  private Sensor sensor; // Pedometer sensor returned by sensor manager
 
-  private CallbackContext callbackContext;  // Keeps track of the JS callback context.
+  private CallbackContext callbackContext; // Keeps track of the JS callback context.
 
   /**
    * Constructor
@@ -83,38 +83,34 @@ public class PedoListener extends CordovaPlugin implements SensorEventListener {
   /**
    * Executes the request.
    *
-   * @param action the action to execute.
-   * @param args the exec() arguments.
-   * @param callbackContext the callback context used when calling back into JavaScript.
+   * @param action          the action to execute.
+   * @param args            the exec() arguments.
+   * @param callbackContext the callback context used when calling back into
+   *                        JavaScript.
    * @return whether the action was valid.
    */
   public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
     this.callbackContext = callbackContext;
 
-    if (action.equals("startStepperUpdates")) {
+    if (action.equals("isStepCountingAvailable")) {
+      isStepCountingAvailable();
+    } else if (action.equals("startStepperUpdates")) {
       start(args);
-    }
-    else if (action.equals("stopStepperUpdates")) {
+    } else if (action.equals("stopStepperUpdates")) {
       stop();
-    }
-    else if (action.equals("setNotificationLocalizedStrings")) {
+    } else if (action.equals("setNotificationLocalizedStrings")) {
       setNotificationLocalizedStrings(args);
       callbackContext.success();
-    }
-    else if (action.equals("setGoal")) {
+    } else if (action.equals("setGoal")) {
       setGoal(args);
       callbackContext.success();
-    }
-    else if (action.equals("getSteps")) {
+    } else if (action.equals("getSteps")) {
       getSteps(args);
-    }
-    else if (action.equals("getStepsByPeriod")) {
+    } else if (action.equals("getStepsByPeriod")) {
       getStepsByPeriod(args);
-    }
-    else if (action.equals("getLastEntries")) {
+    } else if (action.equals("getLastEntries")) {
       getLastEntries(args);
-    }
-    else {
+    } else {
       return false;
     }
     return true;
@@ -132,8 +128,7 @@ public class PedoListener extends CordovaPlugin implements SensorEventListener {
       stepsToGo = joStrings.getString("stepsToGo");
       yourProgress = joStrings.getString("yourProgress");
       goalReached = joStrings.getString("goalReached");
-    }
-    catch (JSONException e) {
+    } catch (JSONException e) {
       e.printStackTrace();
       return;
     }
@@ -157,8 +152,7 @@ public class PedoListener extends CordovaPlugin implements SensorEventListener {
   private void setGoal(JSONArray args) {
     try {
       goal = args.getInt(0);
-    }
-    catch (JSONException e) {
+    } catch (JSONException e) {
       e.printStackTrace();
       return;
     }
@@ -173,8 +167,7 @@ public class PedoListener extends CordovaPlugin implements SensorEventListener {
     long date = 0;
     try {
       date = args.getLong(0);
-    }
-    catch (JSONException e) {
+    } catch (JSONException e) {
       e.printStackTrace();
       return;
     }
@@ -186,8 +179,7 @@ public class PedoListener extends CordovaPlugin implements SensorEventListener {
     JSONObject joresult = new JSONObject();
     try {
       joresult.put("steps", steps);
-    }
-    catch (JSONException e) {
+    } catch (JSONException e) {
       e.printStackTrace();
       return;
     }
@@ -200,8 +192,7 @@ public class PedoListener extends CordovaPlugin implements SensorEventListener {
     try {
       startdate = args.getLong(0);
       endate = args.getLong(1);
-    }
-    catch (JSONException e) {
+    } catch (JSONException e) {
       e.printStackTrace();
       return;
     }
@@ -213,20 +204,29 @@ public class PedoListener extends CordovaPlugin implements SensorEventListener {
     JSONObject joresult = new JSONObject();
     try {
       joresult.put("steps", steps);
-    }
-    catch (JSONException e) {
+    } catch (JSONException e) {
       e.printStackTrace();
       return;
     }
     callbackContext.success(joresult);
   }
 
+  private void isStepCountingAvailable() {
+    sensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
+    sensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+    if (sensor != null) {
+      this.win(true);
+    } else {
+      this.status = PedoListener.ERROR_NO_SENSOR_FOUND;
+      this.win(false);
+    }
+  }
+
   private void getLastEntries(JSONArray args) {
     int num = 0;
     try {
       num = args.getInt(0);
-    }
-    catch (JSONException e) {
+    } catch (JSONException e) {
       e.printStackTrace();
       return;
     }
@@ -245,8 +245,7 @@ public class PedoListener extends CordovaPlugin implements SensorEventListener {
         jaEntries.put(joEntry);
       }
       joresult.put("entries", jaEntries);
-    }
-    catch (JSONException e) {
+    } catch (JSONException e) {
       e.printStackTrace();
       return;
     }
@@ -288,11 +287,11 @@ public class PedoListener extends CordovaPlugin implements SensorEventListener {
     }
 
     // Set options
-    SharedPreferences prefs =
-      getActivity().getSharedPreferences("pedometer", Context.MODE_PRIVATE);
+    SharedPreferences prefs = getActivity().getSharedPreferences("pedometer", Context.MODE_PRIVATE);
 
     if (options.has(PEDOMETER_GOAL_REACHED_FORMAT_TEXT)) {
-      prefs.edit().putString(PEDOMETER_GOAL_REACHED_FORMAT_TEXT, options.getString(PEDOMETER_GOAL_REACHED_FORMAT_TEXT)).commit();
+      prefs.edit().putString(PEDOMETER_GOAL_REACHED_FORMAT_TEXT, options.getString(PEDOMETER_GOAL_REACHED_FORMAT_TEXT))
+          .commit();
     }
 
     if (options.has(PEDOMETER_IS_COUNTING_TEXT)) {
@@ -300,18 +299,21 @@ public class PedoListener extends CordovaPlugin implements SensorEventListener {
     }
 
     if (options.has(PEDOMETER_STEPS_TO_GO_FORMAT_TEXT)) {
-      prefs.edit().putString(PEDOMETER_STEPS_TO_GO_FORMAT_TEXT, options.getString(PEDOMETER_STEPS_TO_GO_FORMAT_TEXT)).commit();
+      prefs.edit().putString(PEDOMETER_STEPS_TO_GO_FORMAT_TEXT, options.getString(PEDOMETER_STEPS_TO_GO_FORMAT_TEXT))
+          .commit();
     }
 
     if (options.has(PEDOMETER_YOUR_PROGRESS_FORMAT_TEXT)) {
-      prefs.edit().putString(PEDOMETER_YOUR_PROGRESS_FORMAT_TEXT, options.getString(PEDOMETER_YOUR_PROGRESS_FORMAT_TEXT)).commit();
+      prefs.edit()
+          .putString(PEDOMETER_YOUR_PROGRESS_FORMAT_TEXT, options.getString(PEDOMETER_YOUR_PROGRESS_FORMAT_TEXT))
+          .commit();
     }
 
     prefs.edit().putInt("startOffset", startOffset).commit();
 
     if (Build.VERSION.SDK_INT >= 26) {
       API26Wrapper.startForegroundService(getActivity(),
-        new Intent(getActivity(), SensorListener.class));
+          new Intent(getActivity(), SensorListener.class));
     } else {
       getActivity().startService(new Intent(getActivity(), SensorListener.class));
     }
@@ -337,7 +339,7 @@ public class PedoListener extends CordovaPlugin implements SensorEventListener {
   private void initSensor() {
     // If already starting or running, then return
     if ((status == PedoListener.RUNNING) || (status == PedoListener.STARTING)
-      && status != PedoListener.PAUSED) {
+        && status != PedoListener.PAUSED) {
       return;
     }
 
@@ -345,8 +347,7 @@ public class PedoListener extends CordovaPlugin implements SensorEventListener {
 
     todayOffset = db.getSteps(Util.getToday());
 
-    SharedPreferences prefs =
-      getActivity().getSharedPreferences("pedometer", Context.MODE_PRIVATE);
+    SharedPreferences prefs = getActivity().getSharedPreferences("pedometer", Context.MODE_PRIVATE);
 
     goal = prefs.getInt(PedoListener.GOAL_PREF_INT, PedoListener.DEFAULT_GOAL);
     since_boot = db.getCurrentSteps();
@@ -357,18 +358,18 @@ public class PedoListener extends CordovaPlugin implements SensorEventListener {
     sensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
     if (sensor == null) {
       new AlertDialog.Builder(getActivity()).setTitle("R.string.no_sensor")
-        .setMessage("R.string.no_sensor_explain")
-        .setOnDismissListener(new DialogInterface.OnDismissListener() {
-          @Override
-          public void onDismiss(final DialogInterface dialogInterface) {
-            getActivity().finish();
-          }
-        }).setNeutralButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-        @Override
-        public void onClick(final DialogInterface dialogInterface, int i) {
-          dialogInterface.dismiss();
-        }
-      }).create().show();
+          .setMessage("R.string.no_sensor_explain")
+          .setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(final DialogInterface dialogInterface) {
+              getActivity().finish();
+            }
+          }).setNeutralButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(final DialogInterface dialogInterface, int i) {
+              dialogInterface.dismiss();
+            }
+          }).create().show();
     } else {
       sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_UI, 0);
     }
@@ -448,10 +449,9 @@ public class PedoListener extends CordovaPlugin implements SensorEventListener {
   private void win(JSONObject message) {
     // Success return object
     PluginResult result;
-    if(message != null) {
+    if (message != null) {
       result = new PluginResult(PluginResult.Status.OK, message);
-    }
-    else {
+    } else {
       result = new PluginResult(PluginResult.Status.OK);
     }
 
