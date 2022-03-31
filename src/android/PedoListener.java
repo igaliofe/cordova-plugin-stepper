@@ -223,9 +223,9 @@ public class PedoListener extends CordovaPlugin implements SensorEventListener {
   }
 
   private void updateSteps(JSONArray args) {
-    long steps;
+    int steps;
     try {
-      steps = args.getLong(0);
+      steps = args.getInt(0);
     } catch (JSONException e) {
       e.printStackTrace();
       return;
