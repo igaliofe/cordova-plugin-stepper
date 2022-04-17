@@ -310,7 +310,7 @@ public class PedoListener extends CordovaPlugin implements SensorEventListener {
 
     // Set options
     SharedPreferences prefs = getActivity().getSharedPreferences("pedometer", Context.MODE_PRIVATE);
-    SharedPreferences.Editor editor = sharedPref.edit();
+    SharedPreferences.Editor editor = prefs.edit();
     editor.putBoolean("isStartService", true);
     editor.commit();
     if (options.has(PEDOMETER_GOAL_REACHED_FORMAT_TEXT)) {
@@ -349,7 +349,8 @@ public class PedoListener extends CordovaPlugin implements SensorEventListener {
     if (status != PedoListener.STOPPED) {
       uninitSensor();
     }
-    SharedPreferences.Editor editor = sharedPref.edit();
+    SharedPreferences prefs = getActivity().getSharedPreferences("pedometer", Context.MODE_PRIVATE);
+    SharedPreferences.Editor editor = prefs.edit();
     editor.putBoolean("isStartService", false);
     editor.commit();
     Database db = Database.getInstance(getActivity());
