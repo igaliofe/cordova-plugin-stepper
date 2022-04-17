@@ -388,7 +388,7 @@ public class PedoListener extends CordovaPlugin implements SensorEventListener {
           .setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(final DialogInterface dialogInterface) {
-              getActivity().finish();
+              // getActivity().finish();
             }
           }).setNeutralButton(android.R.string.ok, new DialogInterface.OnClickListener() {
             @Override
