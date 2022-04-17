@@ -18,7 +18,10 @@ public class BootReceiver extends BroadcastReceiver {
           Intent.ACTION_BOOT_COMPLETED)) {
 
           SharedPreferences prefs = context.getSharedPreferences("pedometer", Context.MODE_PRIVATE);
-
+          Boolean isStartService = prefs.getBoolean("isStartService", false);
+          if(!isStartService){
+            return;
+          }
           Database db = Database.getInstance(context);
 
           if (!prefs.getBoolean("correctShutdown", false)) {
