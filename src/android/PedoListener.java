@@ -242,21 +242,9 @@ public class PedoListener extends CordovaPlugin implements SensorEventListener {
       joresult.put("newSteps", steps);
     } catch (JSONException e) {
       e.printStackTrace();
-      new AlertDialog.Builder(getActivity()).setTitle("newSteps")
-      .setMessage("R.string.no_sensor_explain")
-      .setOnDismissListener(new DialogInterface.OnDismissListener() {
-        @Override
-        public void onDismiss(final DialogInterface dialogInterface) {
-          // getActivity().finish();
-        }
-      }).setNeutralButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-        @Override
-        public void onClick(final DialogInterface dialogInterface, int i) {
-          dialogInterface.dismiss();
-        }
-      }).create().show();
       return;
     }
+    updateUI();
     callbackContext.success(joresult);
   }
 
