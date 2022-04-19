@@ -111,11 +111,14 @@ public class PedoListener extends CordovaPlugin implements SensorEventListener {
       getStepsByPeriod(args);
     } else if (action.equals("getLastEntries")) {
       getLastEntries(args);
+    } else if (action.equals("updateSteps")) {
+      updateSteps(args);
     } else {
       return false;
     }
     return true;
   }
+  
 
   private void setNotificationLocalizedStrings(JSONArray args) {
     String pedometerIsCounting;
