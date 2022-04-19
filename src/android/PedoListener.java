@@ -238,10 +238,10 @@ public class PedoListener extends CordovaPlugin implements SensorEventListener {
 
       return;
     }
-    total_start = steps;
+    since_boot = steps;
     SharedPreferences prefs = cordova.getContext().getSharedPreferences("pedometer", Context.MODE_PRIVATE);
-    if (total_start > 0) {
-      prefs.edit().putInt(PedoListener.STEPS_PREF_INT, total_start).apply();
+    if (since_boot > 0) {
+      prefs.edit().putInt(PedoListener.STEPS_PREF_INT, since_boot).apply();
     }
   }
 
