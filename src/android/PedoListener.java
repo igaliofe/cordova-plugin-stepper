@@ -48,6 +48,7 @@ public class PedoListener extends CordovaPlugin implements SensorEventListener {
   public static int DEFAULT_GOAL = 1000;
 
   public static String GOAL_PREF_INT = "GoalPrefInt";
+  public static String STEPS_PREF_INT = "StepPrefInt";
 
   public static String PEDOMETER_IS_COUNTING_TEXT = "pedometerIsCountingText";
   public static String PEDOMETER_STEPS_TO_GO_FORMAT_TEXT = "pedometerStepsToGoFormatText";
@@ -238,16 +239,11 @@ public class PedoListener extends CordovaPlugin implements SensorEventListener {
       
       return;
     }
-    total_days = steps;
-    JSONObject joresult = new JSONObject();
-    try {
-      joresult.put("newSteps", steps);
-    } catch (JSONException e) {
-      e.printStackTrace();
-      return;
+    total_start = steps;
+    SharedPreferences prefs = cordova.getContext().getSharedPreferences("pedometer", Context.MODE_PRIVATE);
+    if (total_start > 0) {
+      prefs.edit().putInt(PedoListener.STEPS_PREF_INT, total_start).apply();
     }
-   
-    this.win(joresult);
   }
 
   private void getLastEntries(JSONArray args) {
@@ -381,7 +377,7 @@ public class PedoListener extends CordovaPlugin implements SensorEventListener {
     todayOffset = db.getSteps(Util.getToday());
 
     SharedPreferences prefs = getActivity().getSharedPreferences("pedometer", Context.MODE_PRIVATE);
-
+STEPS_PREF_INT
     goal = prefs.getInt(PedoListener.GOAL_PREF_INT, PedoListener.DEFAULT_GOAL);
     since_boot = db.getCurrentSteps();
     int pauseDifference = since_boot - prefs.getInt("pauseCount", since_boot);
@@ -411,6 +407,7 @@ public class PedoListener extends CordovaPlugin implements SensorEventListener {
 
     total_start = db.getTotalWithoutToday();
     total_days = db.getDays();
+    if(t)
 
     db.close();
 
