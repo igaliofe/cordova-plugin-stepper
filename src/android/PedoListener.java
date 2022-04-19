@@ -233,7 +233,9 @@ public class PedoListener extends CordovaPlugin implements SensorEventListener {
     try {
       steps = args.getInt(0);
     } catch (JSONException e) {
+      this.win(false);
       e.printStackTrace();
+      
       return;
     }
     total_days = steps;
@@ -244,8 +246,8 @@ public class PedoListener extends CordovaPlugin implements SensorEventListener {
       e.printStackTrace();
       return;
     }
-    updateUI();
-    callbackContext.success(joresult);
+   
+    this.win(joresult);
   }
 
   private void getLastEntries(JSONArray args) {
