@@ -47,7 +47,7 @@ Stepper.prototype.getStepsByPeriod = function (start, end, onSuccess, onError) {
     exec(onSuccess, onError, "Stepper", "getStepsByPeriod", [start, end]);
 };
 Stepper.prototype.updateSteps = function (steps, onSuccess, onError) {
-    exec(onSuccess, onError, "Stepper", "getStepsByPeriod", [steps]);
+    exec(onSuccess, onError, "Stepper", "updateSteps", [steps]);
 };
 
 Stepper.prototype.getTotalWithoutToday = function (onSuccess, onError) {
